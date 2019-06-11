@@ -2,7 +2,7 @@
 
 
 [[projects]]
-  digest = "1:a3a700fde960868375691c0ffb5fac44111249e9e12d47d9bfc9a3faf10f8694"
+  digest = "1:fd77ec2535d0b1268e396cf35975a74a0496862a0ee262c778392e84eee71c60"
   name = "cloud.google.com/go"
   packages = [
     "compute/metadata",
@@ -11,37 +11,23 @@
     "internal/optional",
     "internal/version",
     "monitoring/apiv3",
+    "pubsub",
+    "pubsub/apiv1",
+    "pubsub/internal/distribution",
     "trace/apiv2",
   ]
   pruneopts = "NUT"
   revision = "90f2606161ee6a14efe2ca79fc05ac2b8efe250b"
 
 [[projects]]
-  digest = "1:642cf8e80572f9dc0677b0f241c8ab2e715c9dccc215270ea873c86ddca0062c"
-  name = "contrib.go.opencensus.io/exporter/prometheus"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "f4a2c1e53ec45636355d35fb9022b64e4bdd4a91"
-  version = "v0.1.0"
-
-[[projects]]
-  digest = "1:f091d5e3183a972fc45c4279cec2d97e13262bfda5b85cda3280cb41475e1415"
+  digest = "1:b6eb7c2538ec2999a072c0e372a18d7b7e3aedac249f26e159586fa5f892909f"
   name = "contrib.go.opencensus.io/exporter/stackdriver"
   packages = [
     ".",
     "monitoredresource",
   ]
   pruneopts = "NUT"
-  revision = "6850d2e00d7dfe4886f7e4773bf9f05e39296d92"
-  version = "v0.12.4"
-
-[[projects]]
-  digest = "1:7b5f423f5b0dd3dfa32a19a6183b0ab9129bff371ebf3f9efae32f87e4986d8f"
-  name = "contrib.go.opencensus.io/exporter/zipkin"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "30f9fad5db2c8944c21d223496e2543aeb445d4c"
-  version = "v0.1.1"
+  revision = "c06c82c832edca4eaf7b0241bd655560a1be0346"
 
 [[projects]]
   digest = "1:9c8312fb77e9c27242307176963dd65c02ad03016f7696026a83214fc45c6566"
@@ -125,15 +111,7 @@
   revision = "3a771d992973f24aa725d07868b467d1ddfceafb"
 
 [[projects]]
-  digest = "1:be1e32779b5150a3e4341f584f14282db95feff53f60d49b17134a5710ac8ff9"
-  name = "github.com/bsm/sarama-cluster"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "c618e605e15c0d7535f6c96ff8efbb0dba4fd66c"
-  version = "v2.1.15"
-
-[[projects]]
-  digest = "1:e7d26760c4e7d67a443b082153c4b473ad0b8f7388302a2f788b1360f751abb8"
+  digest = "1:06bd9f98d7cf2097c16f820f980709eb4d04e1c7369132c351fbf1ffb54d3117"
   name = "github.com/census-instrumentation/opencensus-proto"
   packages = [
     "gen-go/agent/common/v1",
@@ -141,8 +119,8 @@
     "gen-go/resource/v1",
   ]
   pruneopts = "NUT"
-  revision = "d89fa54de508111353cb0b06403c00569be780d8"
-  version = "v0.2.1"
+  revision = "a105b96453fe85139acc07b68de48f2cbdd71249"
+  version = "v0.2.0"
 
 [[projects]]
   digest = "1:0b2ffe5c17b0a3d49cc0a0cc20a13f7e1223fca1cd26587248a6b65c801dd46e"
@@ -278,7 +256,7 @@
   revision = "6f2cf27854a4a29e3811b0371547be335d411b8b"
 
 [[projects]]
-  digest = "1:f5a98770ab68c1146ee5cc14ed24aafa2bb1a2b3c89cbeadc9eb913b1f9d930a"
+  digest = "1:4dacf728c83400b3e9d1d3025dd3c1e93e9a1b033726d1b193dc209f3fa9cb7a"
   name = "github.com/golang/protobuf"
   packages = [
     "proto",
@@ -520,6 +498,67 @@
   pruneopts = "NUT"
   revision = "f611eb38b3875cc3bd991ca91c51d06446afa14c"
   version = "v1.3.0"
+
+[[projects]]
+  digest = "1:f4d08f98ce04ca52197f2bb0cd40bfc8da83ace982df9f6c4f7f241f00009f80"
+  name = "github.com/knative/eventing"
+  packages = [
+    "pkg/apis/duck/v1alpha1",
+    "pkg/apis/eventing",
+    "pkg/apis/eventing/v1alpha1",
+    "pkg/apis/messaging",
+    "pkg/apis/messaging/v1alpha1",
+    "pkg/apis/sources",
+    "pkg/apis/sources/v1alpha1",
+    "pkg/client/clientset/versioned",
+    "pkg/client/clientset/versioned/scheme",
+    "pkg/client/clientset/versioned/typed/eventing/v1alpha1",
+    "pkg/client/clientset/versioned/typed/messaging/v1alpha1",
+    "pkg/client/clientset/versioned/typed/sources/v1alpha1",
+    "pkg/client/informers/externalversions/eventing/v1alpha1",
+    "pkg/client/informers/externalversions/internalinterfaces",
+    "pkg/client/listers/eventing/v1alpha1",
+    "pkg/duck",
+    "pkg/logging",
+    "pkg/reconciler",
+    "pkg/reconciler/names",
+    "pkg/utils",
+  ]
+  pruneopts = "NUT"
+  revision = "677d3d17e84b7337f006220d6bb465af4f416f81"
+
+[[projects]]
+  digest = "1:1fa8a00b12c1ad84d6ed050e328d750d16c3f3bd62dae55c449322dc7c355a28"
+  name = "github.com/knative/serving"
+  packages = [
+    "pkg/apis/autoscaling",
+    "pkg/apis/autoscaling/v1alpha1",
+    "pkg/apis/config",
+    "pkg/apis/networking",
+    "pkg/apis/networking/v1alpha1",
+    "pkg/apis/serving",
+    "pkg/apis/serving/v1alpha1",
+    "pkg/apis/serving/v1beta1",
+    "pkg/client/clientset/versioned",
+    "pkg/client/clientset/versioned/scheme",
+    "pkg/client/clientset/versioned/typed/autoscaling/v1alpha1",
+    "pkg/client/clientset/versioned/typed/networking/v1alpha1",
+    "pkg/client/clientset/versioned/typed/serving/v1alpha1",
+    "pkg/client/clientset/versioned/typed/serving/v1beta1",
+  ]
+  pruneopts = "NUT"
+  revision = "50cdf8762deae58ed89763adef26a88e7efecac7"
+
+[[projects]]
+  branch = "master"
+  digest = "1:480c2cdecde930157f2d3849eb3f1769d2c9215c44823e77ac52a653b24d9536"
+  name = "github.com/knative/test-infra"
+  packages = [
+    "scripts",
+    "tools/dep-collector",
+  ]
+  pruneopts = "UT"
+  revision = "a3c073a2fea1d6a5a97c4150b05792a3faba2bc0"
 
 [[projects]]
   digest = "1:56dbf15e091bf7926cb33a57cb6bdfc658fc6d3498d2f76f10a97ce7856f1fde"
@@ -824,18 +863,12 @@
   version = "v1.0.3"
 
 [[projects]]
-  digest = "1:3a4c90791db3bf894a26cf6ffc0f792a31d0f225664c38b0577f02a36bc0cda7"
-  name = "go.etcd.io/bbolt"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "a0458a2b35708eef59eb5f620ceb3cd1c01a824d"
-  version = "v1.3.3"
-
-[[projects]]
-  digest = "1:0e3fd52087079d1289983e4fef32268ca965973f5370b69204e2934185527baa"
+  digest = "1:bce7c290509e40fd1c73d700305c1961004d08c9a1812e47533416a8742893a7"
   name = "go.opencensus.io"
   packages = [
     ".",
+    "exemplar",
+    "exporter/prometheus",
     "internal",
     "internal/tagencoding",
     "metric/metricdata",
@@ -1068,7 +1101,8 @@
   version = "v1.3.0"
 
 [[projects]]
-  digest = "1:20e41ea0a46968c5efef50d40ccb1c0afae9fa0384d32c3e5c86c48a779e4a37"
+  branch = "master"
+  digest = "1:af2611f15281f91a306c50b94f9e5956f80f742887f835bb3b6a38caa546f77a"
   name = "google.golang.org/genproto"
   packages = [
     "googleapis/api",
@@ -1077,10 +1111,10 @@
     "googleapis/api/label",
     "googleapis/api/metric",
     "googleapis/api/monitoredres",
-    "googleapis/container/v1",
     "googleapis/devtools/cloudtrace/v2",
     "googleapis/iam/v1",
     "googleapis/monitoring/v3",
+    "googleapis/pubsub/v1",
     "googleapis/rpc/status",
     "protobuf/field_mask",
   ]
@@ -1206,17 +1240,14 @@
   version = "kubernetes-1.12.6"
 
 [[projects]]
-  digest = "1:e464a08adca7204feeb7c356010d02e0c2c9d20ac30d476235351be105e5132f"
+  digest = "1:51f330b7a61ac0e8b6e082490586ff2b18008eb514a67eccbe5ec78ffd32ee25"
   name = "k8s.io/apiextensions-apiserver"
   packages = [
     "pkg/apis/apiextensions",
     "pkg/apis/apiextensions/v1beta1",
     "pkg/client/clientset/clientset",
-    "pkg/client/clientset/clientset/fake",
     "pkg/client/clientset/clientset/scheme",
     "pkg/client/clientset/clientset/typed/apiextensions/v1beta1",
-    "pkg/client/clientset/clientset/typed/apiextensions/v1beta1/fake",
-    "pkg/client/listers/apiextensions/v1beta1",
   ]
   pruneopts = "NUT"
   revision = "bd0469a053ff88529a61145790499fe78a09a49d"
@@ -1463,6 +1494,8 @@
   digest = "1:26b81b5e76e3f84ea5140da4f74649576e470f79091d2ef8e0d1b5000bc636ca"
   name = "k8s.io/code-generator"
   packages = [
+    "cmd/client-gen/generators/util",
+    "cmd/client-gen/types",
     "cmd/deepcopy-gen",
     "cmd/deepcopy-gen/args",
     "pkg/util",
@@ -1628,17 +1661,6 @@
   revision = "a6a69f05dddad562f81539d6ef78b52cebc44226"
 
 [[projects]]
-  branch = "master"
-  digest = "1:68050b4ce26531655bac0f6e109d04eb0a4550ead73e320119ed3c628ced4a0a"
-  name = "knative.dev/test-infra"
-  packages = [
-    "scripts",
-    "tools/dep-collector",
-  ]
-  pruneopts = "UT"
-  revision = "17f2331e80ad0d3e170ea2bae45c3922744f83af"
-
-[[projects]]
   digest = "1:399953e7c3ac9253dcf1fe909b0a74f6d1c4e974decefd6f5d361cab06249ccc"
   name = "sigs.k8s.io/controller-runtime"
   packages = [
@@ -1727,8 +1749,16 @@
     "github.com/google/go-github/github",
     "github.com/gorilla/websocket",
     "github.com/kelseyhightower/envconfig",
-    "github.com/nats-io/go-nats-streaming",
-    "github.com/nats-io/nats-streaming-server/server",
+    "github.com/knative/eventing-sources/contrib/kafka/pkg/client/informers/externalversions/sources/v1alpha1",
+    "github.com/knative/eventing/pkg/apis/eventing/v1alpha1",
+    "github.com/knative/eventing/pkg/apis/sources/v1alpha1",
+    "github.com/knative/eventing/pkg/client/clientset/versioned",
+
+    "github.com/knative/serving/pkg/apis/serving/v1alpha1",
+    "github.com/knative/serving/pkg/client/clientset/versioned",
+    "github.com/knative/serving/pkg/client/clientset/versioned/typed/serving/v1alpha1",
+    "github.com/knative/test-infra/scripts",
+    "github.com/knative/test-infra/tools/dep-collector",
     "github.com/onsi/ginkgo",
     "github.com/onsi/gomega",
     "go.opencensus.io/stats",
@@ -1746,6 +1776,7 @@
     "k8s.io/api/rbac/v1",
     "k8s.io/api/rbac/v1beta1",
     "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1",
+    "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset",
     "k8s.io/apimachinery/pkg/api/equality",
     "k8s.io/apimachinery/pkg/api/errors",
     "k8s.io/apimachinery/pkg/api/meta",
@@ -1768,13 +1799,9 @@
     "k8s.io/client-go/dynamic/fake",
     "k8s.io/client-go/informers",
     "k8s.io/client-go/informers/apps/v1",
-    "k8s.io/client-go/informers/core/v1",
     "k8s.io/client-go/kubernetes",
-    "k8s.io/client-go/kubernetes/fake",
     "k8s.io/client-go/kubernetes/scheme",
     "k8s.io/client-go/kubernetes/typed/core/v1",
-    "k8s.io/client-go/listers/apps/v1",
-    "k8s.io/client-go/listers/core/v1",
     "k8s.io/client-go/plugin/pkg/client/auth/gcp",
     "k8s.io/client-go/rest",
     "k8s.io/client-go/testing",
@@ -1801,12 +1828,6 @@
     "knative.dev/pkg/apis",
     "knative.dev/pkg/apis/duck",
     "knative.dev/pkg/apis/duck/v1alpha1",
-    "knative.dev/pkg/apis/duck/v1beta1",
-    "knative.dev/pkg/client/clientset/versioned/fake",
-    "knative.dev/pkg/configmap",
-    "knative.dev/pkg/controller",
-    "knative.dev/pkg/injection",
-    "knative.dev/pkg/kmeta",
     "knative.dev/pkg/kmp",
     "knative.dev/pkg/logging",
     "knative.dev/pkg/logging/logkey",
@@ -1818,12 +1839,6 @@
     "knative.dev/pkg/system/testing",
     "knative.dev/pkg/test",
     "knative.dev/pkg/test/logging",
-    "knative.dev/pkg/webhook",
-    "knative.dev/serving/pkg/apis/serving/v1beta1",
-    "knative.dev/serving/pkg/client/clientset/versioned",
-    "knative.dev/serving/pkg/client/clientset/versioned/typed/serving/v1beta1",
-    "knative.dev/test-infra/scripts",
-    "knative.dev/test-infra/tools/dep-collector",
     "sigs.k8s.io/controller-runtime/pkg/client",
     "sigs.k8s.io/controller-runtime/pkg/client/config",
     "sigs.k8s.io/controller-runtime/pkg/client/fake",

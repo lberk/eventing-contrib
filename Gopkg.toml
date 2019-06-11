@@ -1,6 +1,7 @@
 required = [
-    "knative.dev/test-infra/scripts",
-    "knative.dev/test-infra/tools/dep-collector",
+    "github.com/knative/test-infra/scripts",
+    "github.com/knative/test-infra/tools/dep-collector",
+    "github.com/knative/pkg/codegen/cmd/injection-gen",
     "github.com/emicklei/go-restful",
     "github.com/onsi/ginkgo", # for test framework
     "github.com/onsi/gomega", # for test matchers
@@ -23,7 +24,7 @@ required = [
   non-go = true
 
 [[prune.project]]
-  name = "knative.dev/test-infra"
+  name = "github.com/knative/test-infra"
   non-go = false
 
 [[prune.project]]
@@ -39,6 +40,7 @@ required = [
 [[prune.project]]
   name = "k8s.io/gengo"
   unused-packages = false
+
 
 [[override]]
   name = "knative.dev/pkg"
