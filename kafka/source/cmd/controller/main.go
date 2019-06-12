@@ -21,8 +21,8 @@ import (
 	"os"
 
 	kafkainformer "github.com/knative/eventing-contrib/contrib/kafka/pkg/client/informers/externalversions"
+	kafkaeventinformer "github.com/knative/eventing-contrib/contrib/kafka/pkg/client/injection/informers/sources/v1alpha1/kafkasource"
 	"github.com/knative/eventing-contrib/contrib/kafka/pkg/reconciler"
-	eventtypeinformer "github.com/knative/eventing-contrib/pkg/client/injection/informers/eventing/v1alpha1/eventtype"
 	kncontroller "github.com/knative/pkg/controller"
 	"github.com/knative/pkg/logging"
 	"github.com/knative/pkg/logging/logkey"
@@ -65,6 +65,8 @@ func main() {
 
 	kafkaInformer := kafkaInformerFactory.Sources().V1alpha1().KafkaSources()
 	deploymentInformer := kubeInformerFactory.Apps().V1().Deployments()
+	eventTypeInformer := kafkaInformerFactory.Sources().V1alpha1().EventTypes()
+
 	// Create a new Cmd to provide shared dependencies and start components
 
 	controller := kncontroller.Impl{
