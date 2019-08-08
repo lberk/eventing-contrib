@@ -22,7 +22,7 @@ source $(dirname $0)/../vendor/knative.dev/test-infra/scripts/library.sh
 
 CODEGEN_PKG=${CODEGEN_PKG:-$(cd ${REPO_ROOT_DIR}; ls -d -1 ./vendor/k8s.io/code-generator 2>/dev/null || echo ../../../k8s.io/code-generator)}
 
-KNATIVE_CODEGEN_PKG=${KNATIVE_CODEGEN_PKG:-$(cd ${REPO_ROOT_DIR}; ls -d -1 ./vendor/github.com/knative/pkg 2>/dev/null || echo ../pkg)}
+KNATIVE_CODEGEN_PKG=${KNATIVE_CODEGEN_PKG:-$(cd ${REPO_ROOT_DIR}; ls -d -1 ./vendor/knative.dev/pkg 2>/dev/null || echo ../pkg)}
 
 # Generate based on annotations
 go generate ./pkg/... ./cmd/... ./github/pkg/... ./camel/source/pkg/... ./kafka/source/pkg/... ./kafka/channel/pkg/... ./awssqs/pkg/...
@@ -45,12 +45,12 @@ for DIR in "${API_DIRS[@]}"; do
     "sources:v1alpha1" \
     --go-header-file ${REPO_ROOT_DIR}/hack/boilerplate.go.txt
 
-  ${KNATIVE_CODEGEN_PKG}/hack/generate-knative.sh "injection" \
-    "github.com/knative/eventing/pkg/client github.com/knative/eventing-contrib/{$DIR}/apis" \
-    "eventing:v1alpha1 sources:v1alpha1 messaging:v1alpha1" \
-    --go-header-file ${REPO_ROOT_DIR}/hack/boilerplate/boilerplate.go.txt
-
 done
+
+  ${KNATIVE_CODEGEN_PKG}/hack/generate-knative.sh "injection" \
+    github.com/knative/eventing-contrib/kafka/source/pkg/client github.com/knative/eventing-contrib/kafka/source/pkg/apis \
+    "sources:v1alpha1" \
+    --go-header-file ${REPO_ROOT_DIR}/hack/boilerplate.go.txt
 
 # Make sure our dependencies are up-to-date
 ${REPO_ROOT_DIR}/hack/update-deps.sh

@@ -17,21 +17,22 @@ limitations under the License.
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 
-	kafkainformer "github.com/knative/eventing-contrib/contrib/kafka/pkg/client/informers/externalversions"
-	kafkaeventinformer "github.com/knative/eventing-contrib/contrib/kafka/pkg/client/injection/informers/sources/v1alpha1/kafkasource"
-	"github.com/knative/eventing-contrib/contrib/kafka/pkg/reconciler"
-	kncontroller "github.com/knative/pkg/controller"
-	"github.com/knative/pkg/logging"
-	"github.com/knative/pkg/logging/logkey"
+	kafkainformer "github.com/knative/eventing-contrib/kafka/source/pkg/client/injection/informers/sources/v1alpha1/kafkasource"
+	reconciler "github.com/knative/eventing-contrib/kafka/source/pkg/reconciler"
+	"github.com/knative/eventing/pkg/duck"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	kubeinformers "k8s.io/client-go/informers"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
-	"knative.dev/eventing-contrib/kafka/source/pkg/apis"
-	controller "knative.dev/eventing-contrib/kafka/source/pkg/reconciler"
+	"k8s.io/client-go/tools/cache"
+	"knative.dev/pkg/configmap"
+	kncontroller "knative.dev/pkg/controller"
+	deploymentinformer "knative.dev/pkg/injection/informers/kubeinformers/appsv1/deployment"
+	"knative.dev/pkg/injection/sharedmain"
 	"knative.dev/pkg/logging/logkey"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	"sigs.k8s.io/controller-runtime/pkg/runtime/signals"
@@ -96,6 +97,8 @@ func main() {
 		logger.Fatal("Failed to start informers: %v", err)
 	}
 	kncontroller.StartAll(stopCh, controller)
+
+	// XXX sharedmain.Main(component, kafka.NewController)
 	//	mgr, err := manager.New(cfg, manager.Options{})
 	//	if err != nil {
 	//		log.Fatal(err)
@@ -119,4 +122,33 @@ func main() {
 
 	// Start the Cmd
 	//	log.Fatal(mgr.Start(stopCh))
+}
+
+//Adapt this as needed?
+type envConfig struct {
+	Image string `envconfig:"KAFKA_RA_IMAGE" required:"true"`
+}
+
+func NewController(
+	ctx context.Context,
+	cmw configmap.Watcher,
+) *kncontroller.Impl {
+
+	kafkaInformer := kafkainformer.Get(ctx)
+	deploymentInformer := deploymentinformer.Get(ctx)
+
+	r := &Reconciler{
+		Base:             reconciler.NewBase(ctx, component, cmw),
+		kafkaLister:      kafkaInformer.Lister(),
+		deploymentLister: deploymentInformer.Lister(),
+	}
+	impl := kncontroller.NewImpl(r, r.Logger, "Kafka")
+	r.sinkReconciler = duck.NewInjectionSinkReconciler(ctx, impl.EnqueueKey)
+
+	r.Logger.Info("Setting up event handlers")
+	kafkaInformer.Informer().AddEventHandler(kncontroller.HandleAll(impl.Enqueue))
+
+	deploymentInformer.Informer().AddEventHandler(cache.FilteringResourceEventHandler{})
+
+	return impl
 }

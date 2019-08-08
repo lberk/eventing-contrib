@@ -500,7 +500,7 @@
   version = "v1.3.0"
 
 [[projects]]
-  digest = "1:f4d08f98ce04ca52197f2bb0cd40bfc8da83ace982df9f6c4f7f241f00009f80"
+  digest = "1:bbffeb814cdfd51c518c2cf857b6b7f88c3af6881fe01a2000434b1d44464e96"
   name = "github.com/knative/eventing"
   packages = [
     "pkg/apis/duck/v1alpha1",
@@ -515,17 +515,25 @@
     "pkg/client/clientset/versioned/typed/eventing/v1alpha1",
     "pkg/client/clientset/versioned/typed/messaging/v1alpha1",
     "pkg/client/clientset/versioned/typed/sources/v1alpha1",
-    "pkg/client/informers/externalversions/eventing/v1alpha1",
-    "pkg/client/informers/externalversions/internalinterfaces",
-    "pkg/client/listers/eventing/v1alpha1",
     "pkg/duck",
     "pkg/logging",
-    "pkg/reconciler",
     "pkg/reconciler/names",
     "pkg/utils",
   ]
   pruneopts = "NUT"
   revision = "677d3d17e84b7337f006220d6bb465af4f416f81"
+
+[[projects]]
+  branch = "master"
+  digest = "1:6231bbba301de8a3e8c0da2d60c4452d7cf2ae7e43ae578c75c06db4c2897e58"
+  name = "github.com/knative/pkg"
+  packages = [
+    "configmap",
+    "logging/logkey",
+    "system",
+  ]
+  pruneopts = "NUT"
+  revision = "972acd413fb96750dc6a4b98e4ba344c594a385b"
 
 [[projects]]
   digest = "1:1fa8a00b12c1ad84d6ed050e328d750d16c3f3bd62dae55c449322dc7c355a28"
@@ -1605,9 +1613,10 @@
     "controller",
     "injection",
     "injection/clients/dynamicclient",
-    "injection/clients/dynamicclient/fake",
     "injection/clients/kubeclient",
-    "injection/clients/kubeclient/fake",
+    "injection/informers/kubeinformers/appsv1/deployment",
+    "injection/informers/kubeinformers/factory",
+    "injection/sharedmain",
     "kmeta",
     "kmp",
     "logging",
@@ -1619,15 +1628,12 @@
     "reconciler/testing",
     "signals",
     "system",
-    "system/testing",
     "test",
     "test/ingress",
     "test/logging",
     "test/monitoring",
     "test/spoof",
     "test/zipkin",
-    "tracing",
-    "tracing/config",
     "tracker",
     "webhook",
   ]
@@ -1753,8 +1759,11 @@
     "github.com/knative/eventing/pkg/apis/eventing/v1alpha1",
     "github.com/knative/eventing/pkg/apis/sources/v1alpha1",
     "github.com/knative/eventing/pkg/client/clientset/versioned",
-
-    "github.com/knative/serving/pkg/apis/serving/v1alpha1",
+    "github.com/knative/eventing/pkg/duck",
+    "github.com/knative/pkg/configmap",
+    "github.com/knative/pkg/logging/logkey",
+    "github.com/knative/pkg/system",
+    "github.com/knative/serving/pkg/apis/serving/v1beta1",
     "github.com/knative/serving/pkg/client/clientset/versioned",
     "github.com/knative/serving/pkg/client/clientset/versioned/typed/serving/v1alpha1",
     "github.com/knative/test-infra/scripts",
@@ -1828,6 +1837,13 @@
     "knative.dev/pkg/apis",
     "knative.dev/pkg/apis/duck",
     "knative.dev/pkg/apis/duck/v1alpha1",
+    "knative.dev/pkg/apis/duck/v1beta1",
+    "knative.dev/pkg/codegen/cmd/injection-gen",
+    "knative.dev/pkg/configmap",
+    "knative.dev/pkg/controller",
+    "knative.dev/pkg/injection",
+    "knative.dev/pkg/injection/informers/kubeinformers/appsv1/deployment",
+    "knative.dev/pkg/injection/sharedmain",
     "knative.dev/pkg/kmp",
     "knative.dev/pkg/logging",
     "knative.dev/pkg/logging/logkey",
