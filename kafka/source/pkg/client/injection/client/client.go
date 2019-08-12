@@ -21,8 +21,8 @@ package client
 import (
 	"context"
 
+	versioned "github.com/knative/eventing-contrib/kafka/source/pkg/client/clientset/versioned"
 	rest "k8s.io/client-go/rest"
-	versioned "knative.dev/eventing-contrib/kafka/source/pkg/client/clientset/versioned"
 	injection "knative.dev/pkg/injection"
 	logging "knative.dev/pkg/logging"
 )

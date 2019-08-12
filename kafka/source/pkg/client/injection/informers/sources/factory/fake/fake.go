@@ -21,9 +21,9 @@ package fake
 import (
 	"context"
 
-	externalversions "knative.dev/eventing-contrib/kafka/source/pkg/client/informers/externalversions"
-	fake "knative.dev/eventing-contrib/kafka/source/pkg/client/injection/client/fake"
-	factory "knative.dev/eventing-contrib/kafka/source/pkg/client/injection/informers/sources/factory"
+	externalversions "github.com/knative/eventing-contrib/kafka/source/pkg/client/informers/externalversions"
+	fake "github.com/knative/eventing-contrib/kafka/source/pkg/client/injection/client/fake"
+	factory "github.com/knative/eventing-contrib/kafka/source/pkg/client/injection/informers/sources/factory"
 	controller "knative.dev/pkg/controller"
 	injection "knative.dev/pkg/injection"
 )
