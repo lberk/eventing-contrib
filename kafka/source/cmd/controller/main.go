@@ -134,13 +134,20 @@ func NewController(
 	cmw configmap.Watcher,
 ) *kncontroller.Impl {
 
+	raImage, defined := os.LookupEnv(raImageEnvVar)
+	if !defined {
+		return fmt.Errorf("required environment variable '%s' not defined", raImageEnvVar)
+	}
+
 	kafkaInformer := kafkainformer.Get(ctx)
 	deploymentInformer := deploymentinformer.Get(ctx)
 
 	r := &Reconciler{
-		Base:             reconciler.NewBase(ctx, component, cmw),
-		kafkaLister:      kafkaInformer.Lister(),
-		deploymentLister: deploymentInformer.Lister(),
+		Base:                reconciler.NewBase(ctx, component, cmw),
+		kafkaLister:         kafkaInformer.Lister(),
+		deploymentLister:    deploymentInformer.Lister(),
+		receiveAdapterImage: raImage, //going to need this from kafkasource.go
+
 	}
 	impl := kncontroller.NewImpl(r, r.Logger, "Kafka")
 	r.sinkReconciler = duck.NewInjectionSinkReconciler(ctx, impl.EnqueueKey)
