@@ -47,10 +47,14 @@ for DIR in "${API_DIRS[@]}"; do
 
 done
 
-  ${KNATIVE_CODEGEN_PKG}/hack/generate-knative.sh "injection" \
-    github.com/knative/eventing-contrib/kafka/source/pkg/client github.com/knative/eventing-contrib/kafka/source/pkg/apis \
-    "sources:v1alpha1" \
-    --go-header-file ${REPO_ROOT_DIR}/hack/boilerplate.go.txt
+#API_DIRS=(kafka/source/pkg)
+#for DIR in "${API_DIRS[@]}"; do
+#  # Knative Injection
+#  ${KNATIVE_CODEGEN_PKG}/hack/generate-knative.sh "injection" \
+#  "knative.dev/eventing-contrib/kafka/source/pkg/client" "knative.dev/eventing-contrib/${DIR}/apis" \
+#  "messaging:v1alpha1" \
+#  --go-header-file ${REPO_ROOT_DIR}/hack/boilerplate.go.txt
+#done
 
 # Make sure our dependencies are up-to-date
 ${REPO_ROOT_DIR}/hack/update-deps.sh
