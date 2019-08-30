@@ -585,6 +585,11 @@ func (ac *AdmissionController) mutate(ctx context.Context, req *admissionv1beta1
 		oldObj = oldObj.DeepCopyObject().(GenericCRD)
 		oldObj.SetDefaults(ctx)
 
+		s, ok := oldObj.(apis.HasSpec)
+		if ok {
+			SetUserInfoAnnotations(s, ctx, req.Resource.Group)
+		}
+
 		if req.SubResource == "" {
 			ctx = apis.WithinUpdate(ctx, oldObj)
 		} else {
