@@ -123,6 +123,9 @@ type KafkaSourceSpec struct {
 
 	// Resource limits and Request specifications of the Receive Adapter Deployment
 	Resources KafkaResourceSpec `json:"resources,omitempty"`
+
+	// Annotations that we'd like propogated to the Receive Adapter
+	RaAnnotations string `json:"raAnnotations,omitempty"`
 }
 
 const (

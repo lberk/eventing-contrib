@@ -234,6 +234,7 @@ func (r *Reconciler) createReceiveAdapter(ctx context.Context, src *v1alpha1.Kaf
 		Image:         r.receiveAdapterImage,
 		Source:        src,
 		Labels:        resources.GetLabels(src.Name),
+		Annotations:   resources.GetRaAnnotations(src.Spec.RaAnnotations),
 		LoggingConfig: loggingConfig,
 		MetricsConfig: metricsConfig,
 		SinkURI:       sinkURI,
@@ -254,8 +255,9 @@ func (r *Reconciler) createReceiveAdapter(ctx context.Context, src *v1alpha1.Kaf
 		return nil, err
 	} else if !metav1.IsControlledBy(ra, src) {
 		return nil, fmt.Errorf("deployment %q is not owned by KafkaSource %q", ra.Name, src.Name)
-	} else if podSpecChanged(ra.Spec.Template.Spec, expected.Spec.Template.Spec) {
+	} else if podSpecChanged(ra.Spec.Template.Spec, expected.Spec.Template.Spec) { // or if len of src.Spec.RaAnnotations has changed?
 		ra.Spec.Template.Spec = expected.Spec.Template.Spec
+		ra.SetAnnotations(expected.GetAnnotations())
 		if ra, err = r.KubeClientSet.AppsV1().Deployments(src.Namespace).Update(ra); err != nil {
 			return ra, err
 		}

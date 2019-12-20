@@ -45,6 +45,9 @@ spec:
     - name: BootstrapServers
       type: string
       JSONPath: ".spec.bootstrapServers"
+    - name: raAnnotations
+      type: string
+      JSONPath: ".spec.raAnnotations"
     - name: Ready
       type: string
       JSONPath: ".status.conditions[?(@.type==\"Ready\")].status"
@@ -60,6 +63,9 @@ spec:
         spec:
           properties:
             bootstrapServers:
+              type: string
+              minLength: 1
+            raAnnotations:
               type: string
               minLength: 1
             topics:
