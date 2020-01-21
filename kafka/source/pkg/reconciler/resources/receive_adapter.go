@@ -33,6 +33,7 @@ type ReceiveAdapterArgs struct {
 	Image         string
 	Source        *v1alpha1.KafkaSource
 	Labels        map[string]string
+	Annotations   map[string]string
 	SinkURI       string
 	MetricsConfig string
 	LoggingConfig string
@@ -135,10 +136,8 @@ func MakeReceiveAdapter(args *ReceiveAdapterArgs) *v1.Deployment {
 			Replicas: &replicas,
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Annotations: map[string]string{
-						"sidecar.istio.io/inject": "true",
-					},
-					Labels: args.Labels,
+					Annotations: args.Annotations,
+					Labels:      args.Labels,
 				},
 				Spec: corev1.PodSpec{
 					ServiceAccountName: args.Source.Spec.ServiceAccountName,

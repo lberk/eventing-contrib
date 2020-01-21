@@ -18,6 +18,7 @@ package kafka
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"reflect"
@@ -83,6 +84,7 @@ type Reconciler struct {
 	loggingContext      context.Context
 	loggingConfig       *pkgLogging.Config
 	metricsConfig       *metrics.ExporterOptions
+	raAnnotations       map[string]string
 }
 
 // Check that our Reconciler implements controller.Reconciler
@@ -230,9 +232,11 @@ func (r *Reconciler) createReceiveAdapter(ctx context.Context, src *v1alpha1.Kaf
 		logging.FromContext(ctx).Error("error while converting metrics config to JSON", zap.Any("receiveAdapter", err))
 	}
 
+	logging.FromContext(ctx).Infof("Using annotations: ", zap.Reflect("Annotations", r.raAnnotations))
 	raArgs := resources.ReceiveAdapterArgs{
 		Image:         r.receiveAdapterImage,
 		Source:        src,
+		Annotations:   r.raAnnotations,
 		Labels:        resources.GetLabels(src.Name),
 		LoggingConfig: loggingConfig,
 		MetricsConfig: metricsConfig,
@@ -462,4 +466,37 @@ func (r *Reconciler) UpdateFromMetricsConfigMap(cfg *corev1.ConfigMap) {
 		ConfigMap: cfg.Data,
 	}
 	logging.FromContext(r.loggingContext).Info("Update from metrics ConfigMap", zap.Any("ConfigMap", cfg))
+}
+
+func (r *Reconciler) UpdateFromAnnotationsConfigMap(cfg *corev1.ConfigMap) {
+	if cfg != nil {
+		delete(cfg.Data, "_example")
+	}
+	raAnnotations, err := NewConfigFromConfigMap(cfg.Data)
+	if err != nil {
+		logging.FromContext(r.loggingContext).Warn("Error updating from annotations ConfigMap", zap.Any("ConfigMap", cfg))
+		r.raAnnotations = raAnnotations // will still contain the default annotations
+		return
+	}
+	r.raAnnotations = raAnnotations
+	logging.FromContext(r.loggingContext).Info("Update from annotations ConfigMap", zap.Any("ConfigMap", cfg))
+}
+
+func NewConfigFromConfigMap(data map[string]string) (map[string]string, error) {
+	raAnnotations := make(map[string]string)
+	if deploymentAnnotations, ok := data["receiveAdapterDeploymentAnnotations"]; ok {
+		if deploymentAnnotations == "" {
+			raAnnotations["sidecar.istio.io/inject"] = "true"
+		} else {
+			err := json.Unmarshal([]byte(deploymentAnnotations), &raAnnotations)
+			if err != nil {
+				raAnnotations["sidecar.istio.io/inject"] = "true"
+				return raAnnotations, err
+			}
+			return raAnnotations, nil
+		}
+	} else {
+		raAnnotations["sidecar.istio.io/inject"] = "true"
+	}
+	return raAnnotations, nil
 }

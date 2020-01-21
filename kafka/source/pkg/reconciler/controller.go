@@ -38,7 +38,8 @@ import (
 )
 
 const (
-	controllerAgentName = "kafka-source-controller"
+	controllerAgentName         = "kafka-source-controller"
+	raAnnotationsCongfigMapName = "config-ra-annotations"
 )
 
 func NewController(
@@ -85,6 +86,7 @@ func NewController(
 
 	cmw.Watch(logging.ConfigMapName(), c.UpdateFromLoggingConfigMap)
 	cmw.Watch(metrics.ConfigMapName(), c.UpdateFromMetricsConfigMap)
+	cmw.Watch(raAnnotationsCongfigMapName, c.UpdateFromAnnotationsConfigMap)
 	return impl
 }
 
