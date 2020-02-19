@@ -25,11 +25,9 @@ import (
 	"time"
 
 	"github.com/Shopify/sarama"
-	"github.com/kelseyhightower/envconfig"
 	"go.uber.org/zap"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
-	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	apierrs "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -42,19 +40,12 @@ import (
 	"knative.dev/eventing/pkg/reconciler"
 	"knative.dev/eventing/pkg/reconciler/names"
 	"knative.dev/pkg/apis"
-	kubeclient "knative.dev/pkg/client/injection/kube/client"
-	"knative.dev/pkg/client/injection/kube/informers/apps/v1/deployment"
-	"knative.dev/pkg/client/injection/kube/informers/core/v1/endpoints"
-	"knative.dev/pkg/client/injection/kube/informers/core/v1/service"
-	"knative.dev/pkg/configmap"
 	"knative.dev/pkg/controller"
-	"knative.dev/pkg/system"
 
 	"knative.dev/eventing-contrib/kafka/channel/pkg/apis/messaging/v1alpha1"
 	kafkaclientset "knative.dev/eventing-contrib/kafka/channel/pkg/client/clientset/versioned"
 	kafkaScheme "knative.dev/eventing-contrib/kafka/channel/pkg/client/clientset/versioned/scheme"
-	kafkaclientsetinjection "knative.dev/eventing-contrib/kafka/channel/pkg/client/injection/client"
-	"knative.dev/eventing-contrib/kafka/channel/pkg/client/injection/informers/messaging/v1alpha1/kafkachannel"
+
 	listers "knative.dev/eventing-contrib/kafka/channel/pkg/client/listers/messaging/v1alpha1"
 	"knative.dev/eventing-contrib/kafka/channel/pkg/reconciler/controller/resources"
 	"knative.dev/eventing-contrib/kafka/channel/pkg/utils"
@@ -130,72 +121,6 @@ var _ controller.Reconciler = (*Reconciler)(nil)
 
 // Check that our Reconciler implements cache.ResourceEventHandler
 var _ cache.ResourceEventHandler = (*Reconciler)(nil)
-
-// NewController initializes the controller and is called by the generated code.
-// Registers event handlers to enqueue events.
-func NewController(
-	ctx context.Context,
-	cmw configmap.Watcher,
-) *controller.Impl {
-	logger := logging.FromContext(ctx)
-
-	kafkaChannelInformer := kafkachannel.Get(ctx)
-	deploymentInformer := deployment.Get(ctx)
-	endpointsInformer := endpoints.Get(ctx)
-	serviceInformer := service.Get(ctx)
-
-	kafkaChannelClientSet := kafkaclientsetinjection.Get(ctx)
-
-	dispatcherNamespace := system.Namespace()
-
-	r := &Reconciler{
-		Base:                     reconciler.NewBase(ctx, controllerAgentName, cmw),
-		dispatcherNamespace:      dispatcherNamespace,
-		dispatcherDeploymentName: dispatcherDeploymentName,
-		dispatcherServiceName:    dispatcherServiceName,
-		kafkachannelLister:       kafkaChannelInformer.Lister(),
-		kafkachannelInformer:     kafkaChannelInformer.Informer(),
-		deploymentLister:         deploymentInformer.Lister(),
-		serviceLister:            serviceInformer.Lister(),
-		endpointsLister:          endpointsInformer.Lister(),
-		kafkaClientSet:           kafkaChannelClientSet,
-	}
-
-	env := &envConfig{}
-	if err := envconfig.Process("", env); err != nil {
-		r.Logger.Panicf("unable to process Kafka channel's required environment variables: %v", err)
-	}
-	r.dispatcherImage = env.Image
-
-	r.impl = controller.NewImpl(r, r.Logger, ReconcilerName)
-
-	// Get and Watch the Kakfa config map and dynamically update Kafka configuration.
-	if _, err := kubeclient.Get(ctx).CoreV1().ConfigMaps(system.Namespace()).Get("config-kafka", metav1.GetOptions{}); err == nil {
-		cmw.Watch("config-kafka", r.updateKafkaConfig)
-	} else if !apierrors.IsNotFound(err) {
-		logger.With(zap.Error(err)).Fatal("Error reading ConfigMap 'config-kafka'")
-	}
-
-	r.Logger.Info("Setting up event handlers")
-	kafkaChannelInformer.Informer().AddEventHandler(controller.HandleAll(r.impl.Enqueue))
-
-	// Set up watches for dispatcher resources we care about, since any changes to these
-	// resources will affect our Channels. So, set up a watch here, that will cause
-	// a global Resync for all the channels to take stock of their health when these change.
-	deploymentInformer.Informer().AddEventHandler(cache.FilteringResourceEventHandler{
-		FilterFunc: controller.FilterWithNameAndNamespace(dispatcherNamespace, dispatcherDeploymentName),
-		Handler:    r,
-	})
-	serviceInformer.Informer().AddEventHandler(cache.FilteringResourceEventHandler{
-		FilterFunc: controller.FilterWithNameAndNamespace(dispatcherNamespace, dispatcherServiceName),
-		Handler:    r,
-	})
-	endpointsInformer.Informer().AddEventHandler(cache.FilteringResourceEventHandler{
-		FilterFunc: controller.FilterWithNameAndNamespace(dispatcherNamespace, dispatcherServiceName),
-		Handler:    r,
-	})
-	return r.impl
-}
 
 // cache.ResourceEventHandler implementation.
 // These 3 functions just cause a Global Resync of the channels, because any changes here
